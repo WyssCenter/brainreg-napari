@@ -472,6 +472,7 @@ def brainreg_register():
         # Get viewer object
         viewer = getattr(widget, "viewer").value
         brain_geometry = getattr(widget, "brain_geometry").value
+        atlas_key = getattr(widget, "atlas_key").value.value
 
         # Remove previous average projection layer if needed
         ind_pop = []
@@ -485,11 +486,11 @@ def brainreg_register():
             del viewer.layers[index]
 
         # Load atlas and gather data
-        atlas = BrainGlobeAtlas('allen_mouse_25um')
+        atlas = BrainGlobeAtlas(atlas_key)
         if brain_geometry.value == "hemisphere_l":
-            atlas.reference[atlas.hemispheres == atlas.left_hemisphere_value] = 0
-        elif brain_geometry.value == "hemisphere_r":
             atlas.reference[atlas.hemispheres == atlas.right_hemisphere_value] = 0
+        elif brain_geometry.value == "hemisphere_r":
+            atlas.reference[atlas.hemispheres == atlas.left_hemisphere_value] = 0
         input_orientation = getattr(widget, "data_orientation").value
         data = getattr(widget, "img_layer").value.data
         # Transform data to atlas orientation from user input
